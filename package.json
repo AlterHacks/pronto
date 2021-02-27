@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve",
+    "serve": "vue-cli-service build --mode development --watch",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint"
   },
@@ -13,6 +13,7 @@
     "vue-router": "^3.2.0"
   },
   "devDependencies": {
+    "@types/firefox-webext-browser": "^67.0.2",
     "@typescript-eslint/eslint-plugin": "^2.33.0",
     "@typescript-eslint/parser": "^2.33.0",
     "@vue/cli-plugin-babel": "~4.5.0",
@@ -27,6 +28,7 @@
     "eslint-plugin-vue": "^6.2.2",
     "prettier": "^1.19.1",
     "typescript": "~3.9.3",
+    "vue-cli-plugin-browser-extension": "~0.25.1",
     "vue-template-compiler": "^2.6.11"
   }
 }
