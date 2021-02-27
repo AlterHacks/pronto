@@ -1,3 +1,3 @@
-browser.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+browser.runtime.onMessage.addListener(() => {
   console.log("Hello from the background");
 });
