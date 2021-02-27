@@ -4,7 +4,7 @@
     <div class="flex">
       <paper>
         <h3 class="text-sm text-gray-300 mb-2">Most Time Spent</h3>
-        <line-chart
+        <pie-chart
           :chartdata="{
             labels: ['January', 'February'],
             datasets: [
@@ -28,11 +28,11 @@
 <script lang="ts">
 import Vue from "vue";
 import Paper from "@/components/Paper.vue";
-import LineChart from "@/components/LineChart.vue";
+import PieChart from "@/components/PieChart.vue";
 
 export default Vue.extend({
   name: "App",
-  components: { Paper, LineChart },
+  components: { Paper, PieChart },
 });
 </script>
 
