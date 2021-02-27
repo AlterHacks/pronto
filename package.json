@@ -9,9 +9,11 @@
   },
   "dependencies": {
     "@tailwindcss/postcss7-compat": "^2.0.2",
+    "@types/chrome": "^0.0.133",
     "autoprefixer": "^9",
     "chart.js": "^2.9.4",
     "core-js": "^3.6.5",
+    "dexie": "^3.0.3",
     "postcss": "^7",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.0.2",
     "vue": "^2.6.11",
@@ -19,6 +21,7 @@
     "vue-router": "^3.2.0"
   },
   "devDependencies": {
+    "@types/filesystem": "^0.0.29",
     "@types/firefox-webext-browser": "^67.0.2",
     "@typescript-eslint/eslint-plugin": "^2.33.0",
     "@typescript-eslint/parser": "^2.33.0",
