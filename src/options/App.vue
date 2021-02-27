@@ -1,24 +1,27 @@
 <template>
   <div class="w-full h-full p-5">
     <h1 class="text-2xl mb-3">Pronto Dashboard</h1>
-    <paper>
-      <line-chart
-        :chartdata="{
-          labels: ['January', 'February'],
-          datasets: [
-            {
-              label: 'Data One',
-              backgroundColor: '#f87979',
-              data: [40, 20],
-            },
-          ],
-        }"
-        :options="{
-          responsive: true,
-          maintainAspectRatio: false,
-        }"
-      />
-    </paper>
+    <div class="flex">
+      <paper>
+        <h3 class="text-sm text-gray-300 mb-2">Most Time Spent</h3>
+        <line-chart
+          :chartdata="{
+            labels: ['January', 'February'],
+            datasets: [
+              {
+                label: 'Data One',
+                backgroundColor: '#f87979',
+                data: [40, 20],
+              },
+            ],
+          }"
+          :options="{
+            responsive: true,
+            maintainAspectRatio: false,
+          }"
+        />
+      </paper>
+    </div>
   </div>
 </template>
 
