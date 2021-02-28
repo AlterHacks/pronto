@@ -66,4 +66,9 @@ export class ProntoDB extends Dexie {
 
     return categoryTimes;
   }
+
+  async getAllTimeSpent() {
+    const entries = await this.hosts.toArray();
+    return entries.reduce((sum, host) => (sum += host.totalTimeSpent), 0);
+  }
 }
