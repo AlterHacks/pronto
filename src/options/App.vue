@@ -12,6 +12,19 @@
         </h3>
         <time-spent-trend :colors="colors" range="day" />
       </paper>
+      <paper class="col-span-2">
+        <h3 class="text-sm text-gray-300 mb-4 text-center">
+          Time Spent Over Time
+        </h3>
+        <time-spent-trend :colors="colors" range="day" />
+      </paper>
+      <paper class="">
+        <h3 class="text-sm text-gray-300 mb-4 text-center">
+          Most Time Spent in Different Categories
+        </h3>
+        <category-pie :colors="colors" />
+      </paper>
+      <dropdown></dropdown>
     </div>
   </div>
 </template>
@@ -21,6 +34,8 @@ import Vue from "vue";
 import Paper from "@/components/Paper.vue";
 import TimeSpentPie from "@/components/TimeSpentPie.vue";
 import TimeSpentTrend from "@/components/TimeSpentTrend.vue";
+import CategoryPie from "@/components/CategoryPie.vue";
+import Dropdown from "@/components/Dropdown.vue";
 
 export default Vue.extend({
   name: "App",
@@ -40,7 +55,7 @@ export default Vue.extend({
       ],
     };
   },
-  components: { Paper, TimeSpentPie, TimeSpentTrend },
+  components: { Paper, TimeSpentPie, TimeSpentTrend, CategoryPie, Dropdown },
 });
 </script>
 

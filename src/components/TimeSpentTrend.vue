@@ -15,6 +15,13 @@
       legend: {
         display: false,
       },
+      scales: {
+        yAxes: [
+          {
+            type: 'logarithmic',
+          },
+        ],
+      },
     }"
     :update="update"
   />
@@ -26,11 +33,30 @@ import LineChart from "@/components/LineChart.vue";
 import { ProntoDB } from "@/ProntoDB";
 import duration from "dayjs/plugin/duration";
 import relativeTime from "dayjs/plugin/relativeTime";
+import updateLocale from "dayjs/plugin/updateLocale";
 import dayjs from "dayjs";
-import { ChartTooltipItem, ChartData } from "chart.js";
+import { ChartTooltipItem, ChartData, ChartPoint } from "chart.js";
 
 dayjs.extend(duration);
 dayjs.extend(relativeTime);
+dayjs.extend(updateLocale);
+dayjs.updateLocale("en", {
+  relativeTime: {
+    future: "in %s",
+    past: "%s ago",
+    s: "%d seconds",
+    m: "a minute",
+    mm: "%d minutes",
+    h: "an hour",
+    hh: "%d hours",
+    d: "a day",
+    dd: "%d days",
+    M: "a month",
+    MM: "%d months",
+    y: "a year",
+    yy: "%d years",
+  },
+});
 
 export default Vue.extend({
   components: { LineChart },
@@ -61,7 +87,7 @@ export default Vue.extend({
       month: 2.628e6,
       year: 3.154e7,
     };
-    const selectedRange = 20000; // ranges[this.range];
+    const selectedRange = 100000; // ranges[this.range];
     const granularity = 100;
 
     const step = selectedRange / granularity;
@@ -74,7 +100,10 @@ export default Vue.extend({
     };
 
     const mappedData: {
-      [host: string]: number[];
+      [host: string]: {
+        x: number;
+        y: number;
+      }[];
     } = {};
     for (let i = 0; i < granularity; i++) {
       const spent = await db.getTopSpentBetween(
@@ -84,9 +113,14 @@ export default Vue.extend({
 
       Object.keys(spent).forEach((key) => {
         if (!mappedData[key]) mappedData[key] = [];
-        mappedData[key].push(spent[key]);
+        mappedData[key].push({
+          x: Date.now() - step * 1000 * i,
+          y: spent[key],
+        });
       });
     }
+
+    console.log(mappedData);
 
     Object.keys(mappedData).forEach((key, i) => {
       lineConfig.datasets?.push({
@@ -96,7 +130,8 @@ export default Vue.extend({
         data: mappedData[key],
         pointRadius: 5,
         pointBackgroundColor: this.colors[i % this.colors.length],
-        lineTension: 0.8,
+        lineTension: 0,
+        showLine: true,
       });
     });
     Vue.set(this.topSpent, "datasets", lineConfig.datasets);
@@ -105,8 +140,10 @@ export default Vue.extend({
   methods: {
     getLabel(tooltipItem: ChartTooltipItem, data: ChartData) {
       const rawUnix =
-        this.topSpent.datasets?.[0]?.data?.[tooltipItem.index!] || 0;
-      return dayjs.duration(rawUnix as number).humanize();
+        (data.datasets?.[tooltipItem.datasetIndex || 0]?.data?.[
+          tooltipItem.index!
+        ] as ChartPoint)?.y || 0;
+      return dayjs.duration(rawUnix as number).humanize(false);
     },
     getTitle(tooltipItem: ChartTooltipItem[], data: ChartData) {
       return data.datasets?.[tooltipItem[0].datasetIndex || 0].label;

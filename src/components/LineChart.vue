@@ -30,7 +30,7 @@ export default Vue.extend({
     this.chartInst = new Chart(
       (this.$refs.chart as HTMLCanvasElement).getContext("2d")!,
       {
-        type: "line",
+        type: "scatter",
         data: this.chartdata,
         options: this.options,
       }

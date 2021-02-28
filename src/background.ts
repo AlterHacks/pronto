@@ -58,23 +58,24 @@ async function stopTracking(tabID: number) {
 
   tab.totalTimeSpent += Date.now() - tab.lastActivated;
 
-  const entry = await db.hosts.get(tab.hostname);
+  const hostname = tab.hostname.replace("www.", "");
+  const entry = await db.hosts.get(hostname);
   if (entry) {
     db.hosts
       .where("hostname")
-      .equals(tab.hostname)
+      .equals(hostname)
       .modify((e) => {
         e.totalTimeSpent += tab.totalTimeSpent;
       });
   } else {
     db.hosts.put({
       totalTimeSpent: tab.totalTimeSpent,
-      hostname: tab.hostname,
+      hostname: hostname,
     });
   }
 
   db.sessions.put({
-    hostname: tab.hostname,
+    hostname: hostname,
     timeStart: tab.lastActivated,
     timeSpent: tab.totalTimeSpent,
   });
@@ -83,7 +84,7 @@ async function stopTracking(tabID: number) {
 chrome.tabs.onUpdated.addListener((tabID, changeInfo, tab) => {
   if (!changeInfo.url) return;
   // start tracking the new hostname
-  startTracking(tabID, new URL(changeInfo.url).hostname);
+  startTracking(tabID, new URL(changeInfo.url).hostname.replace("www.", ""));
   // if we had an old hostname, stop tracking and commit to DB
 
   if (!lastTab) lastTab = tabID;
@@ -113,6 +114,9 @@ chrome.tabs.onActivated.addListener(async (activeInfo) => {
 chrome.tabs.query({}, (tabs) => {
   tabs.forEach((tab) => {
     if ((!tab.url && !tab.pendingUrl) || !tab.id) return;
-    startTracking(tab.id, new URL(tab.url || tab.pendingUrl || "").hostname);
+    startTracking(
+      tab.id,
+      new URL(tab.url || tab.pendingUrl || "").hostname.replace("www.", "")
+    );
   });
 });
