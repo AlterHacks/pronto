@@ -34,10 +34,14 @@
         </h3>
         <category-pie :colors="colors" />
       </paper>
-      <dropdown
-        :options="dropdownOptions"
-        v-model="selectedCategory"
-      ></dropdown>
+      <dropdown :options="dropdownOptions" v-model="selectedCategory"></dropdown>
+
+      <paper class="col-span-3">
+        <h3 class="text-sm text-gray-300 mb-4 text-center">
+          Most Time Spent in Different Categories
+        </h3>
+      <category-goals :colors="colors" />
+      </paper>
     </div>
   </div>
 </template>
@@ -51,6 +55,7 @@ import CategoryPie from "@/components/CategoryPie.vue";
 import AllTimeSpent from "@/components/AllTimeSpent.vue";
 import TabGroup from "@/components/TabGroup.vue";
 import TabGroupItem from "@/components/TabGroupItem.vue";
+import CategoryGoals from "@/components/CategoryGoals.vue";
 
 export default Vue.extend({
   name: "App",
@@ -85,6 +90,7 @@ export default Vue.extend({
     AllTimeSpent,
     TabGroupItem,
     TabGroup,
+    CategoryGoals
   },
 });
 </script>

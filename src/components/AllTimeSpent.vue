@@ -24,7 +24,7 @@ export default Vue.extend({
   computed: {
     humanTime(): string {
       const duration = dayjs.duration(this.totalTime);
-      return Math.round(duration.asHours()).toString();
+      return Math.round(duration.asHours()) as unknown as string;
     },
   },
 });
