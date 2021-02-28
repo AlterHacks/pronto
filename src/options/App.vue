@@ -1,10 +1,16 @@
 <template>
   <div class="w-full h-full p-5">
     <h1 class="text-2xl mb-3">Pronto Dashboard</h1>
-    <div class="flex">
+    <div class="grid gap-4 grid-cols-3 w-full">
       <paper>
         <h3 class="text-sm text-gray-300 mb-4 text-center">Most Time Spent</h3>
         <time-spent-pie :colors="colors" />
+      </paper>
+      <paper class="col-span-2">
+        <h3 class="text-sm text-gray-300 mb-4 text-center">
+          Time Spent Over Time
+        </h3>
+        <time-spent-trend :colors="colors" range="day" />
       </paper>
     </div>
   </div>
@@ -14,6 +20,7 @@
 import Vue from "vue";
 import Paper from "@/components/Paper.vue";
 import TimeSpentPie from "@/components/TimeSpentPie.vue";
+import TimeSpentTrend from "@/components/TimeSpentTrend.vue";
 
 export default Vue.extend({
   name: "App",
@@ -33,14 +40,14 @@ export default Vue.extend({
       ],
     };
   },
-  components: { Paper, TimeSpentPie },
+  components: { Paper, TimeSpentPie, TimeSpentTrend },
 });
 </script>
 
 <style lang="postcss">
 html,
 body {
-  @apply w-full h-full bg-prontodark-900;
+  @apply w-full h-full;
 }
 
 html {
@@ -48,6 +55,6 @@ html {
 }
 
 .dark {
-  @apply text-white;
+  @apply text-white bg-prontodark-900;
 }
 </style>

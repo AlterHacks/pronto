@@ -1,10 +1,12 @@
+<template>
+  <canvas ref="chart" class="w-full"></canvas>
+</template>
+
 <script lang="ts">
+import Chart from "chart.js";
 import Vue from "vue";
-import { Line } from "vue-chartjs";
-import { BaseChart } from "vue-chartjs/types/components";
 
 export default Vue.extend({
-  extends: Line,
   props: {
     chartdata: {
       type: Object as () => Chart.ChartData,
@@ -14,9 +16,30 @@ export default Vue.extend({
       type: Object as () => Chart.ChartOptions,
       default: null,
     },
+    update: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  data() {
+    return {
+      chartInst: undefined as Chart | undefined,
+    };
   },
   mounted() {
-    ((this as unknown) as BaseChart).renderChart(this.chartdata, this.options);
+    this.chartInst = new Chart(
+      (this.$refs.chart as HTMLCanvasElement).getContext("2d")!,
+      {
+        type: "line",
+        data: this.chartdata,
+        options: this.options,
+      }
+    );
+  },
+  watch: {
+    update() {
+      this.chartInst?.update();
+    },
   },
 });
 </script>

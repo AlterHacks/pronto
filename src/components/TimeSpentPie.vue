@@ -2,7 +2,7 @@
   <pie-chart
     :chartdata="topSpent"
     :options="{
-      responsive: false,
+      responsive: true,
       maintainAspectRatio: true,
       aspectRatio: 1,
       tooltips: {
@@ -56,7 +56,7 @@ export default Vue.extend({
     Vue.set(
       this.topSpent,
       "labels",
-      spent.map((val) => val.url)
+      spent.map((val) => val.hostname)
     );
     Vue.set(
       this.topSpent.datasets![0],

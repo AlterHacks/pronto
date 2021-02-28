@@ -58,31 +58,26 @@ async function stopTracking(tabID: number) {
 
   tab.totalTimeSpent += Date.now() - tab.lastActivated;
 
-  const entry = await db.tabTimes.get(tab.hostname);
+  const entry = await db.hosts.get(tab.hostname);
   if (entry) {
-    db.tabTimes
-      .where("url")
+    db.hosts
+      .where("hostname")
       .equals(tab.hostname)
       .modify((e) => {
-        e.sessions.push({
-          timeSpent: tab.totalTimeSpent,
-          timeStart: tab.lastActivated,
-        });
-
         e.totalTimeSpent += tab.totalTimeSpent;
       });
   } else {
-    db.tabTimes.put({
-      sessions: [
-        {
-          timeSpent: tab.totalTimeSpent,
-          timeStart: tab.lastActivated,
-        },
-      ],
+    db.hosts.put({
       totalTimeSpent: tab.totalTimeSpent,
-      url: tab.hostname,
+      hostname: tab.hostname,
     });
   }
+
+  db.sessions.put({
+    hostname: tab.hostname,
+    timeStart: tab.lastActivated,
+    timeSpent: tab.totalTimeSpent,
+  });
 }
 
 chrome.tabs.onUpdated.addListener((tabID, changeInfo, tab) => {
