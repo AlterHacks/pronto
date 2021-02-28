@@ -3,23 +3,8 @@
     <h1 class="text-2xl mb-3">Pronto Dashboard</h1>
     <div class="flex">
       <paper>
-        <h3 class="text-sm text-gray-300 mb-2">Most Time Spent</h3>
-        <pie-chart
-          :chartdata="{
-            labels: ['January', 'February'],
-            datasets: [
-              {
-                label: 'Data One',
-                backgroundColor: '#f87979',
-                data: [40, 20],
-              },
-            ],
-          }"
-          :options="{
-            responsive: true,
-            maintainAspectRatio: false,
-          }"
-        />
+        <h3 class="text-sm text-gray-300 mb-4 text-center">Most Time Spent</h3>
+        <time-spent-pie :colors="colors" />
       </paper>
     </div>
   </div>
@@ -28,11 +13,27 @@
 <script lang="ts">
 import Vue from "vue";
 import Paper from "@/components/Paper.vue";
-import PieChart from "@/components/PieChart.vue";
+import TimeSpentPie from "@/components/TimeSpentPie.vue";
 
 export default Vue.extend({
   name: "App",
-  components: { Paper, PieChart },
+  data() {
+    return {
+      colors: [
+        "#355070ff",
+        "#6d597aff",
+        "#b56576ff",
+        "#e56b6fff",
+        "#eaac8bff",
+        "#cdb4dbff",
+        "#ffc8ddff",
+        "#ffafccff",
+        "#bde0feff",
+        "#a2d2ffff",
+      ],
+    };
+  },
+  components: { Paper, TimeSpentPie },
 });
 </script>
 

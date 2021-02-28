@@ -1,30 +1,123 @@
-import Dexie from "dexie";
 import { ProntoDB } from "./ProntoDB";
 
 const db = new ProntoDB();
 
-const open_tabs: {
-  [tab_id: number]: {
-    time_opened: number;
-    url: string;
+// const openTabs: {
+//   [tabID: number]: {
+//     timeOpened: number;
+//     timeSpent: number;
+//     url: string;
+//   };
+// } = {};
+// let lastTab: number | undefined = undefined;
+
+const openTabs: {
+  [tabID: number]: {
+    lastActivated: number;
+    totalTimeSpent: number;
+    hostname: string;
   };
 } = {};
+let lastTab: number | undefined = undefined;
 
-chrome.tabs.onCreated.addListener((tab) => {
-  if (!tab.id) return;
+function ensureTab(tabID: number, hostname: string) {
+  if (!openTabs[tabID]) {
+    openTabs[tabID] = {
+      lastActivated: Date.now(),
+      totalTimeSpent: 0,
+      hostname,
+    };
+  }
+  return openTabs[tabID];
+}
 
-  const site = tab.url || tab.pendingUrl || "";
+function startTracking(tabID: number, hostname: string) {
+  console.log("started tracking");
+  ensureTab(tabID, hostname);
+  //
+}
 
-  open_tabs[tab.id] = { time_opened: Date.now(), url: site };
-});
+function resumeTracking(tabID: number) {
+  console.log("resume tracking");
+  const tab = openTabs[tabID];
+  tab.lastActivated = Date.now();
+}
 
-chrome.tabs.onRemoved.addListener((tabID, removeInfo) => {
-  const tab = open_tabs[tabID];
-  if (tab) {
-    db.tabTimes.add({
-      url: tab.url,
-      time_spent: Date.now() - tab.time_opened,
-      time_start: tab.time_opened,
+function pauseTracking(tabID: number) {
+  console.log("pause tracking");
+  const tab = openTabs[tabID];
+  if (!tab) return;
+  tab.totalTimeSpent += Date.now() - tab.lastActivated;
+}
+
+async function stopTracking(tabID: number) {
+  const tab = openTabs[tabID];
+  console.log("stop tracking", tab);
+
+  if (!tab) return;
+
+  tab.totalTimeSpent += Date.now() - tab.lastActivated;
+
+  const entry = await db.tabTimes.get(tab.hostname);
+  if (entry) {
+    db.tabTimes
+      .where("url")
+      .equals(tab.hostname)
+      .modify((e) => {
+        e.sessions.push({
+          timeSpent: tab.totalTimeSpent,
+          timeStart: tab.lastActivated,
+        });
+
+        e.totalTimeSpent += tab.totalTimeSpent;
+      });
+  } else {
+    db.tabTimes.put({
+      sessions: [
+        {
+          timeSpent: tab.totalTimeSpent,
+          timeStart: tab.lastActivated,
+        },
+      ],
+      totalTimeSpent: tab.totalTimeSpent,
+      url: tab.hostname,
     });
   }
+}
+
+chrome.tabs.onUpdated.addListener((tabID, changeInfo, tab) => {
+  if (!changeInfo.url) return;
+  // start tracking the new hostname
+  startTracking(tabID, new URL(changeInfo.url).hostname);
+  // if we had an old hostname, stop tracking and commit to DB
+
+  if (!lastTab) lastTab = tabID;
+});
+
+chrome.tabs.onRemoved.addListener(async (tabID) => {
+  // stop tracking the hostname in the tab
+  stopTracking(tabID);
+
+  // remove from openTabs list
+  delete openTabs[tabID];
+});
+//
+
+chrome.tabs.onActivated.addListener(async (activeInfo) => {
+  if (!openTabs[activeInfo.tabId]) return;
+  // restart tracking of the same hostname
+  resumeTracking(activeInfo.tabId);
+  // pause tracking of old hostname
+  if (lastTab) {
+    pauseTracking(lastTab);
+  }
+  // ONLY RUN AT THE END DONT RUN ANYTHING AFTERWARD PLEASEEEEE OWO
+  lastTab = activeInfo.tabId;
+});
+
+chrome.tabs.query({}, (tabs) => {
+  tabs.forEach((tab) => {
+    if ((!tab.url && !tab.pendingUrl) || !tab.id) return;
+    startTracking(tab.id, new URL(tab.url || tab.pendingUrl || "").hostname);
+  });
 });

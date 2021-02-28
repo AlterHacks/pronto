@@ -1,19 +1,32 @@
 import { Dexie } from "dexie";
 
-interface ITabTime {
+interface ITabEntry {
+  timeStart: number;
+  timeSpent: number;
+}
+
+interface ISiteEntry {
   url: string;
-  time_start: number;
-  time_spent: number;
+  totalTimeSpent: number;
+  sessions: ITabEntry[];
 }
 
 export class ProntoDB extends Dexie {
-  tabTimes: Dexie.Table<ITabTime, string>;
+  tabTimes: Dexie.Table<ISiteEntry, string>;
 
   constructor() {
     super("tabs");
     this.version(1).stores({
-      tabTimes: "++url, date, time_spent",
+      tabTimes: "url, totalTimeSpent, sessions",
     });
     this.tabTimes = this.table("tabTimes");
+  }
+
+  getTopSpent() {
+    return this.tabTimes
+      .orderBy("totalTimeSpent")
+      .reverse()
+      .limit(20)
+      .toArray();
   }
 }
