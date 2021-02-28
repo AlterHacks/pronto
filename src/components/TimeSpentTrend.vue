@@ -21,6 +21,11 @@
             type: 'logarithmic',
           },
         ],
+        xAxes: [
+          {
+            type: 'time',
+          },
+        ],
       },
     }"
     :update="update"
@@ -118,10 +123,7 @@ export default Vue.extend({
       };
 
       const mappedData: {
-        [host: string]: {
-          x: number;
-          y: number;
-        }[];
+        [host: string]: ChartPoint[];
       } = {};
       for (let i = 0; i < granularity; i++) {
         const spent = await db.getTopSpentBetween(
@@ -132,7 +134,7 @@ export default Vue.extend({
         Object.keys(spent).forEach((key) => {
           if (!mappedData[key]) mappedData[key] = [];
           mappedData[key].push({
-            x: Date.now() - step * 1000 * i,
+            x: new Date(Date.now() - step * 1000 * i),
             y: spent[key],
           });
         });

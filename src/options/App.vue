@@ -1,12 +1,13 @@
 <template>
   <div class="w-full h-full p-5">
+    <portal-target name="destination"> </portal-target>
     <h1 class="text-2xl mb-3">Pronto Dashboard</h1>
     <div class="grid gap-4 grid-cols-3 w-full">
-      <paper>
+      <paper class="col-span-3 sm:col-auto">
         <h3 class="text-sm text-gray-300 mb-4 text-center">Most Time Spent</h3>
         <time-spent-pie :colors="colors" />
       </paper>
-      <paper class="col-span-2">
+      <paper class="col-span-3 sm:col-span-2">
         <h3 class="text-sm text-gray-300 mb-4 text-center">
           Time Spent Over Time
         </h3>
@@ -34,17 +35,21 @@
         </h3>
         <category-pie :colors="colors" />
       </paper>
-      <paper class="col-span-1">
-        <h3 class="text-sm text-gray-300 mb-4 text-center">
-          Most Time Spent in Different Categories
+      <paper class="col-span-3 md:col-span-1">
+        <h3 class="text-base text-gray-300 mb-2 text-center">
+          Set a goal
         </h3>
-      <goal-setter/>
+        <p class="text-sm text-gray-400 mb-2">
+          Setting a goal for how much time you spend on a certain kind of site
+          can help you keep on task.
+        </p>
+        <goal-setter />
       </paper>
-      <paper class="col-span-2">
+      <paper class="col-span-3 md:col-span-2">
         <h3 class="text-sm text-gray-300 mb-4 text-center">
-          Most Time Spent in Different Categories
+          Diffrence between your goals and your acual time spent per category
         </h3>
-      <category-goals :colors="colors" />
+        <category-goals :colors="colors" />
       </paper>
     </div>
   </div>
@@ -78,6 +83,8 @@ export default Vue.extend({
         "#bde0feff",
         "#a2d2ffff",
       ],
+      rangeOptions: ["day", "week", "month", "year"],
+      selectedRange: "day",
     };
   },
   components: {
@@ -89,7 +96,7 @@ export default Vue.extend({
     TabGroupItem,
     TabGroup,
     CategoryGoals,
-    GoalSetter
+    GoalSetter,
   },
 });
 </script>

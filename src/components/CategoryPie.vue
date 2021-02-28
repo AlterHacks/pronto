@@ -27,6 +27,7 @@ import duration from "dayjs/plugin/duration";
 import relativeTime from "dayjs/plugin/relativeTime";
 import dayjs from "dayjs";
 import { ChartTooltipItem, ChartData } from "chart.js";
+import { Humanized } from "@/categories";
 
 dayjs.extend(duration);
 dayjs.extend(relativeTime);
@@ -73,7 +74,8 @@ export default Vue.extend({
       return dayjs.duration(rawUnix as number).humanize();
     },
     getTitle(tooltipItem: ChartTooltipItem[], data: ChartData) {
-      return data.labels?.[tooltipItem[0].index || 0];
+      const title = data.labels?.[tooltipItem[0].index || 0] as string;
+      return Humanized[title || ""];
     },
   },
 });

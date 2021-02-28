@@ -57,8 +57,30 @@ export class ProntoDB extends Dexie {
         .toArray();
 
       let totalCategoryTime = 0;
-      eligibleHosts.forEach((hostEntry) => {
-        totalCategoryTime += hostEntry.totalTimeSpent;
+      eligibleHosts.forEach((sessionEntry) => {
+        totalCategoryTime += sessionEntry.totalTimeSpent;
+      });
+
+      categoryTimes[category] = totalCategoryTime;
+    }
+
+    return categoryTimes;
+  }
+
+  async getTopCategoriesBetween(start: number, end: number) {
+    const categoryTimes: { [keys: string]: number } = {};
+    for (const [category, hostnames] of Object.entries(categories)) {
+      const eligibleHosts = await this.sessions
+        .where("timeStart")
+        .between(start, end)
+        .filter((element) => {
+          return hostnames.includes(element.hostname);
+        })
+        .toArray();
+
+      let totalCategoryTime = 0;
+      eligibleHosts.forEach((sessionEntry) => {
+        totalCategoryTime += sessionEntry.timeSpent;
       });
 
       categoryTimes[category] = totalCategoryTime;

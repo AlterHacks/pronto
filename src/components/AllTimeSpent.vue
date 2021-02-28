@@ -1,7 +1,7 @@
 <template>
   <div>
-    <h1 class="text-2xl mb-8">Time spent on the internet:</h1>
-    <h1 class="text-8xl text-gray-300">{{ humanTime }} Hours.</h1>
+    <h1 class="text-2xl mb-8">Total time spent:</h1>
+    <h1 class="lg:text-8xl text-4xl text-gray-300">{{ humanTime }}</h1>
   </div>
 </template>
 
@@ -24,7 +24,20 @@ export default Vue.extend({
   computed: {
     humanTime(): string {
       const duration = dayjs.duration(this.totalTime);
-      return Math.round(duration.asHours()) as unknown as string;
+      const hours = Math.round(duration.asHours());
+      const minutes = Math.round(duration.asMinutes());
+
+      if (hours === 0 && minutes === 0) {
+        return "No significant time";
+      } else if (hours == 0 && minutes > 0) {
+        return minutes.toString() + " minutes.";
+      } else if (hours > 0 && minutes == 0) {
+        return hours.toString() + " hours.";
+      } else {
+        return (
+          hours.toString() + " hours and " + minutes.toString() + " minutes."
+        );
+      }
     },
   },
 });

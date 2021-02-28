@@ -21,6 +21,33 @@ import sports from "./sports";
 import travel from "./travel";
 import vehicles from "./vehicles";
 
+export const Humanized: {
+  [key: string]: string;
+} = {
+  artsEntertainment: "Arts and Entertainment",
+  homeGardening: "Home and Gardening",
+  lawsGovt: "Law and Government",
+  buisness: "Business",
+  career: "Career",
+  education: "Education",
+  electronics: "Electronics",
+  finance: "Finance",
+  food: "Food",
+  gambling: "Gambling",
+  gamimg: "Gaming",
+  health: "Health",
+  industry: "Industry",
+  leisure: "Leisure",
+  lifestyle: "Lifestyle",
+  news: "News",
+  pets: "Pets",
+  reference: "Reference",
+  shopping: "Shopping",
+  sports: "Sports",
+  travel: "Travel",
+  vehicles: "Vehicles",
+};
+
 export default {
   artsEntertainment,
   buisness,

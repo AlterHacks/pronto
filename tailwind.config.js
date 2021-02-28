@@ -1,3 +1,5 @@
+const colors = require("tailwindcss/colors");
+
 module.exports = {
   purge: { content: ["./public/**/*.html", "./src/**/*.vue"] },
   darkMode: "class", // or 'media' or 'class'
@@ -5,6 +7,8 @@ module.exports = {
     extend: {
       darkMode: "class",
       colors: {
+        primary: colors.blue,
+        secondary: colors.amber,
         prontodark: {
           "50": "#9ea0b3",
           "100": "#8f92a8",
