@@ -1,24 +1,9 @@
 # pronto
 
-## Project setup
-```
-yarn install
-```
+### A time tracker browser extension to help you stay focused while at home
 
-### Compiles and hot-reloads for development
-```
-yarn serve
-```
+### HOW TO USE
 
-### Compiles and minifies for production
-```
-yarn build
-```
-
-### Lints and fixes files
-```
-yarn lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+1. Download pronto-v0.1.0-production.zip in this repo
+2. Unzip the folder
+3. Go into the chrome extensions page and then click 'Load Unpacked Extension'
