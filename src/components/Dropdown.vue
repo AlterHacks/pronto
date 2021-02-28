@@ -1,10 +1,8 @@
 <template>
   <div class="dropdown">
-    <button class="dropbtn">Dropdown</button>
+    <button class="dropbtn">{{ value.name || "Select..." }}</button>
     <div class="dropdown-content">
-      <a href="#">Link 1</a>
-      <a href="#">Link 2</a>
-      <a href="#">Link 3</a>
+      <div v-for="option in options" :key="option.id" @click="selectOption(option)">{{ option.name }}</div>
     </div>
   </div>
 </template>
@@ -12,7 +10,14 @@
 <script lang="ts">
 import Vue from "vue";
 
-export default Vue.extend({});
+export default Vue.extend({
+  methods: {
+    selectOption(option) {
+      this.$emit('input', option)
+    }
+  },
+  props: ['options', 'value']
+});
 </script>
 
 <style scoped lang="postcss">
@@ -33,7 +38,7 @@ export default Vue.extend({});
 }
 
 /* Links inside the dropdown */
-.dropdown-content a {
+.dropdown-content div {
   @apply text-white;
   padding: 12px 16px;
   text-decoration: none;
@@ -41,7 +46,7 @@ export default Vue.extend({});
 }
 
 /* Change color of dropdown links on hover */
-.dropdown-content a:hover {
+.dropdown-content div:hover {
   @apply bg-prontodark-700 hover:bg-blue-200 hover:text-black;
   box-shadow: 0 4px 18px 0 theme("colors.blue.400");
 }

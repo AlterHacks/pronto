@@ -24,7 +24,7 @@
         </h3>
         <category-pie :colors="colors" />
       </paper>
-      <dropdown></dropdown>
+      <dropdown :options="dropdownOptions" v-model="selectedCategory"></dropdown>
     </div>
   </div>
 </template>
@@ -53,6 +53,11 @@ export default Vue.extend({
         "#bde0feff",
         "#a2d2ffff",
       ],
+      dropdownOptions: [
+        {id: 0, name: 'Apple'},
+        {id: 0, name: 'Orange'}
+      ],
+      selectedCategory: ''
     };
   },
   components: { Paper, TimeSpentPie, TimeSpentTrend, CategoryPie, Dropdown },
