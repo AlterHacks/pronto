@@ -2,7 +2,13 @@
   <div class="dropdown">
     <button class="dropbtn">{{ value.name || "Select..." }}</button>
     <div class="dropdown-content">
-      <div v-for="option in options" :key="option.id" @click="selectOption(option)">{{ option.name }}</div>
+      <div
+        v-for="option in options"
+        :key="option.id"
+        @click="selectOption(option)"
+      >
+        {{ option.name }}
+      </div>
     </div>
   </div>
 </template>
@@ -12,11 +18,11 @@ import Vue from "vue";
 
 export default Vue.extend({
   methods: {
-    selectOption(option) {
-      this.$emit('input', option)
-    }
+    selectOption(option: any) {
+      this.$emit("input", option);
+    },
   },
-  props: ['options', 'value']
+  props: ["options", "value"],
 });
 </script>
 

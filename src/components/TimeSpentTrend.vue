@@ -79,63 +79,12 @@ export default Vue.extend({
     };
   },
   async mounted() {
-    // in seconds
-    const ranges = {
-      hour: 3.6e3,
-      day: 8.64e4,
-      week: 6.048e5,
-      month: 2.628e6,
-      year: 3.154e7,
-    };
-    const selectedRange = 100000; // ranges[this.range];
-    const granularity = 100;
-
-    const step = selectedRange / granularity;
-
-    const db = new ProntoDB();
-
-    const lineConfig: Chart.ChartData = {
-      labels: [],
-      datasets: [],
-    };
-
-    const mappedData: {
-      [host: string]: {
-        x: number;
-        y: number;
-      }[];
-    } = {};
-    for (let i = 0; i < granularity; i++) {
-      const spent = await db.getTopSpentBetween(
-        Date.now() - step * 1000 * i,
-        Date.now() - step * 1000 * (i - 1)
-      );
-
-      Object.keys(spent).forEach((key) => {
-        if (!mappedData[key]) mappedData[key] = [];
-        mappedData[key].push({
-          x: Date.now() - step * 1000 * i,
-          y: spent[key],
-        });
-      });
-    }
-
-    console.log(mappedData);
-
-    Object.keys(mappedData).forEach((key, i) => {
-      lineConfig.datasets?.push({
-        borderColor: this.colors[i % this.colors.length],
-        fill: false,
-        label: key,
-        data: mappedData[key],
-        pointRadius: 5,
-        pointBackgroundColor: this.colors[i % this.colors.length],
-        lineTension: 0,
-        showLine: true,
-      });
-    });
-    Vue.set(this.topSpent, "datasets", lineConfig.datasets);
-    this.update = !this.update;
+    this.updateGraph();
+  },
+  watch: {
+    range(): void {
+      this.updateGraph();
+    },
   },
   methods: {
     getLabel(tooltipItem: ChartTooltipItem, data: ChartData) {
@@ -147,6 +96,64 @@ export default Vue.extend({
     },
     getTitle(tooltipItem: ChartTooltipItem[], data: ChartData) {
       return data.datasets?.[tooltipItem[0].datasetIndex || 0].label;
+    },
+    async updateGraph() {
+      const ranges = {
+        hour: 3.6e3,
+        day: 8.64e4,
+        week: 6.048e5,
+        month: 2.628e6,
+        year: 3.154e7,
+      };
+      const selectedRange = ranges[this.range];
+      const granularity = 100;
+
+      const step = selectedRange / granularity;
+
+      const db = new ProntoDB();
+
+      const lineConfig: Chart.ChartData = {
+        labels: [],
+        datasets: [],
+      };
+
+      const mappedData: {
+        [host: string]: {
+          x: number;
+          y: number;
+        }[];
+      } = {};
+      for (let i = 0; i < granularity; i++) {
+        const spent = await db.getTopSpentBetween(
+          Date.now() - step * 1000 * i,
+          Date.now() - step * 1000 * (i - 1)
+        );
+
+        Object.keys(spent).forEach((key) => {
+          if (!mappedData[key]) mappedData[key] = [];
+          mappedData[key].push({
+            x: Date.now() - step * 1000 * i,
+            y: spent[key],
+          });
+        });
+      }
+
+      console.log(mappedData);
+
+      Object.keys(mappedData).forEach((key, i) => {
+        lineConfig.datasets?.push({
+          borderColor: this.colors[i % this.colors.length],
+          fill: false,
+          label: key,
+          data: mappedData[key],
+          pointRadius: 5,
+          pointBackgroundColor: this.colors[i % this.colors.length],
+          lineTension: 0,
+          showLine: true,
+        });
+      });
+      Vue.set(this.topSpent, "datasets", lineConfig.datasets);
+      this.update = !this.update;
     },
   },
 });
