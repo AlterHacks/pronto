@@ -1,10 +1,9 @@
 <template>
   <paper>
-    <div class="flex align-middle">
-      <h1 class="text-lg">ProntoPopover</h1>
-      <h-btn @click.native="optionsButtonClick" class="mb-2"
-        >View more stats</h-btn
-      >
+    <div class="flex align-text-top items-center justify-center mb-4">
+      <h1 class="text-lg">Pronto</h1>
+      <div class="flex-1" />
+      <h-btn @click.native="optionsButtonClick">View more stats</h-btn>
     </div>
     <h3 class="text-sm text-gray-300 mb-4 text-center">Most Time Spent</h3>
     <time-spent-pie :colors="colors" />

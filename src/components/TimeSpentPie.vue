@@ -63,7 +63,11 @@ export default Vue.extend({
       "data",
       spent.map((val) => val.totalTimeSpent)
     );
-    Vue.set(this.topSpent.datasets![0], "backgroundColor", this.colors);
+    Vue.set(
+      this.topSpent.datasets![0],
+      "backgroundColor",
+      spent.map((_, i) => this.colors[i % this.colors.length])
+    );
     this.update = !this.update;
   },
   methods: {
