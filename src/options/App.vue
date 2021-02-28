@@ -34,9 +34,13 @@
         </h3>
         <category-pie :colors="colors" />
       </paper>
-      <dropdown :options="dropdownOptions" v-model="selectedCategory"></dropdown>
-
-      <paper class="col-span-3">
+      <paper class="col-span-1">
+        <h3 class="text-sm text-gray-300 mb-4 text-center">
+          Most Time Spent in Different Categories
+        </h3>
+      <goal-setter/>
+      </paper>
+      <paper class="col-span-2">
         <h3 class="text-sm text-gray-300 mb-4 text-center">
           Most Time Spent in Different Categories
         </h3>
@@ -56,6 +60,7 @@ import AllTimeSpent from "@/components/AllTimeSpent.vue";
 import TabGroup from "@/components/TabGroup.vue";
 import TabGroupItem from "@/components/TabGroupItem.vue";
 import CategoryGoals from "@/components/CategoryGoals.vue";
+import GoalSetter from "@/components/GoalSetter.vue";
 
 export default Vue.extend({
   name: "App",
@@ -73,13 +78,6 @@ export default Vue.extend({
         "#bde0feff",
         "#a2d2ffff",
       ],
-      dropdownOptions: [
-        { id: 0, name: "Apple" },
-        { id: 0, name: "Orange" },
-      ],
-      selectedCategory: "",
-      rangeOptions: ["day", "week", "month", "year"],
-      selectedRange: "day",
     };
   },
   components: {
@@ -90,7 +88,8 @@ export default Vue.extend({
     AllTimeSpent,
     TabGroupItem,
     TabGroup,
-    CategoryGoals
+    CategoryGoals,
+    GoalSetter
   },
 });
 </script>

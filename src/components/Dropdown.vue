@@ -1,13 +1,13 @@
 <template>
   <div class="dropdown">
-    <button class="dropbtn">{{ value.name || "Select..." }}</button>
+    <button class="dropbtn">{{ value || "Select..." }}</button>
     <div class="dropdown-content">
       <div
         v-for="option in options"
-        :key="option.id"
+        :key="option"
         @click="selectOption(option)"
       >
-        {{ option.name }}
+        {{ option }}
       </div>
     </div>
   </div>
