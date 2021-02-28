@@ -12,11 +12,10 @@
         </h3>
         <time-spent-trend :colors="colors" range="day" />
       </paper>
-      <paper class="col-span-2">
-        <h3 class="text-sm text-gray-300 mb-4 text-center">
-          Time Spent Over Time
-        </h3>
-        <time-spent-trend :colors="colors" range="day" />
+      <paper class="col-span-2 flex flex-col justify-center text-center">
+        <div class="flex flex-1 justify-center items-center">
+          <all-time-spent />
+        </div>
       </paper>
       <paper class="">
         <h3 class="text-sm text-gray-300 mb-4 text-center">
@@ -24,7 +23,6 @@
         </h3>
         <category-pie :colors="colors" />
       </paper>
-      <dropdown></dropdown>
     </div>
   </div>
 </template>
@@ -35,7 +33,7 @@ import Paper from "@/components/Paper.vue";
 import TimeSpentPie from "@/components/TimeSpentPie.vue";
 import TimeSpentTrend from "@/components/TimeSpentTrend.vue";
 import CategoryPie from "@/components/CategoryPie.vue";
-import Dropdown from "@/components/Dropdown.vue";
+import AllTimeSpent from "@/components/AllTimeSpent.vue";
 
 export default Vue.extend({
   name: "App",
@@ -55,7 +53,13 @@ export default Vue.extend({
       ],
     };
   },
-  components: { Paper, TimeSpentPie, TimeSpentTrend, CategoryPie, Dropdown },
+  components: {
+    Paper,
+    TimeSpentPie,
+    TimeSpentTrend,
+    CategoryPie,
+    AllTimeSpent,
+  },
 });
 </script>
 
